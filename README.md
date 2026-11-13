@@ -1,5 +1,4 @@
-# dynamemo (Day Pocket / 開心卡包)
-
+Packlog
 3D 卡包開箱網頁:卡店 → 書桌開包 → 翻卡。Three.js + Vite,資料存在瀏覽器 IndexedDB。
 
     npm install
