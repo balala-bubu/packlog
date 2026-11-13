@@ -45,7 +45,7 @@ export function createCardShared(tint) {
     maskPolaroid: canvasTexture(drawCardMask('polaroid'), { srgb: false }),
     maskTicket: canvasTexture(drawCardMask('ticket'), { srgb: false }),
     glitter: canvasTexture(glitterNormal(256), { srgb: false, repeat: [5, 7] }),
-    shadow: canvasTexture(radialTexture([[0, 'rgba(70,50,35,.55)'], [0.55, 'rgba(70,50,35,.2)'], [1, 'rgba(70,50,35,0)']], 128)),
+    shadow: canvasTexture(radialTexture([[0, 'rgba(0,0,0,.5)'], [0.55, 'rgba(0,0,0,.18)'], [1, 'rgba(0,0,0,0)']], 128)),
     stickers: {},
   };
   const getSticker = (k) => (tex.stickers[k] ||= canvasTexture(stickerCanvas(k)));
@@ -175,6 +175,7 @@ export class Card {
     this.sq = new Spring(1, S.squash);
     this.sel = new Spring(1, S.move);
     this.lift = new Spring(0, S.move);
+    this.k = 1; // 版面縮放(窄螢幕時整排卡片縮小)
     this.faceUp = false;
     this.selected = false;
     this.tremble = false;
@@ -218,7 +219,7 @@ export class Card {
     }
     this.root.position.set(this.sx.x + tx, this.sy.x + ty, this.sz.x + this.lift.x + bump);
     this.root.rotation.z = this.rz.x + tr;
-    const sc = this.sq.x * this.sel.x;
+    const sc = this.sq.x * this.sel.x * this.k;
     this.root.scale.set(sc, sc, sc);
     this.inner.rotation.set(this.tiltX.x, this.flip.x + this.tiltY.x, 0);
 

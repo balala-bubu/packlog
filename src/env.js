@@ -8,9 +8,9 @@ export function makeEnvironment(renderer) {
   const geo = new THREE.SphereGeometry(10, 40, 20);
   const pos = geo.attributes.position;
   const cols = [];
-  const lo = new THREE.Color('#ffe9dd');
-  const mid = new THREE.Color('#fffaf3');
-  const hi = new THREE.Color('#bfdcff');
+  const lo = new THREE.Color('#eceff3');
+  const mid = new THREE.Color('#ffffff');
+  const hi = new THREE.Color('#d5e0ee');
   const c = new THREE.Color();
   for (let i = 0; i < pos.count; i++) {
     const t = pos.getY(i) / 10 * 0.5 + 0.5;
@@ -39,7 +39,7 @@ export function makeEnvironment(renderer) {
   panel(2.5, 5, [7, 1, 3], [1, 0.92, 0.96], 4); // 右側長條
   panel(7, 1.2, [0, 7, -1], [1, 1, 1], 5); // 頂光
   panel(4, 2.5, [-7, -1, -3], [0.75, 0.88, 1], 3); // 左後冷色
-  panel(3, 3, [3, -4, 6], [1, 0.85, 0.75], 2.2); // 下前暖色補光
+  panel(3, 3, [3, -4, 6], [1, 0.95, 0.9], 2.2); // 下前暖色補光
 
   const pm = new THREE.PMREMGenerator(renderer);
   const rt = pm.fromScene(s, 0.025);

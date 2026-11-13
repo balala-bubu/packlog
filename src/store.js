@@ -39,6 +39,7 @@ export function newCard(o = {}) {
     caption: String(o.caption || '').slice(0, 40),
     rarity: RARITIES.includes(o.rarity) ? o.rarity : 'normal',
     share_scope: o.share_scope === 'share' ? 'share' : 'private', // 不確定就當私人
+    seen: !!o.seen, // 抽到過就不再是 NEW
     mood: normalizeMood(o.mood),
     border: normalizeBorder(o.border),
   };
@@ -54,6 +55,9 @@ export function newPack(o = {}) {
     color: CONFIG.style.packColors[o.color] ? o.color : colors[packs.length % colors.length],
     sticker: CONFIG.style.stickers.includes(o.sticker) ? o.sticker : 'none',
     perOpen: Math.round(num(o.perOpen, CONFIG.pack.cardsPerPack, 1, 5)),
+    fav: !!o.fav, // 最愛:顯示在首頁櫥窗
+    createdAt: num(o.createdAt, Date.now(), 0, 9e15),
+    openedAt: num(o.openedAt, 0, 0, 9e15), // 最近開過的時間,「最近」排序用
     cover: { img: typeof cv.img === 'string' ? cv.img : '', x: num(cv.x, 0, -0.6, 0.6), y: num(cv.y, 0, -0.6, 0.6), scale: num(cv.scale, 0.8, 0.2, 2) },
     text: {
       on: tx.on !== undefined ? !!tx.on : true,
@@ -116,6 +120,32 @@ export function addPack(o) {
   save();
   return p;
 }
+export const getFavs = () => packs.filter((p) => p.fav);
+export const getRecents = () => [...packs].sort((a, b) => Math.max(b.openedAt, b.createdAt) - Math.max(a.openedAt, a.createdAt));
+export function toggleFav(pack) {
+  pack.fav = !pack.fav;
+  save();
+  return pack.fav;
+}
+export function touchOpened(pack) {
+  pack.openedAt = Date.now();
+  save();
+}
+// 把這次抽到的卡標成「看過」,回傳每張是不是第一次抽到(NEW)。同一次裡重複的只算第一張。
+export function markSeen(cards) {
+  const seen = new Set();
+  const out = cards.map((c) => {
+    const isNew = !c.seen && !seen.has(c.id);
+    seen.add(c.id);
+    return isNew;
+  });
+  cards.forEach((c) => { c.seen = true; });
+  save();
+  return out;
+}
+const NAME_KEY = 'dynamemo.name';
+export const getUserName = () => { try { return localStorage.getItem(NAME_KEY) || '我'; } catch (_) { return '我'; } };
+export const setUserName = (v) => { try { localStorage.setItem(NAME_KEY, String(v).trim().slice(0, 8) || '我'); } catch (_) { /* ignore */ } };
 export function removePack(id) {
   packs = packs.filter((p) => p.id !== id);
   save();

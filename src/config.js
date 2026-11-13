@@ -6,7 +6,7 @@ export const CONFIG = {
   fx: {
     enabled: true,
     shake: true,
-    glow: true,
+    glow: false, // 白底上加亮的光看不到,改成黑色閃爍 + 震動
     slash: true, // 撕包光痕
     flash: true,
     particles: true,
@@ -87,9 +87,9 @@ export const CONFIG = {
   },
 
   colors: {
-    cream: '#2e3034', // 郵票/票根缺口用的底色 = 書桌墊面的顏色
+    cream: '#ffffff', // 郵票/票根缺口用的底色 = 頁面底色
     ink: '#2a2a2c',
-    confetti: ['#ff8f9d', '#ffc078', '#ffe587', '#8fdba5', '#86c2ff', '#c3b0ff', '#ffffff'],
+    confetti: ['#000000', '#000000', '#5da4f5', '#ee8fab', '#f4d56c', '#a690e8', '#80c9a6'],
     dust: '#ffd98a',
     edgeGlow: [1.0, 0.78, 0.38], // 溶解邊緣的暖光
     // 心情矩陣四角顏色(愉快×能量)
